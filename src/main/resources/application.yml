@@ -1,0 +1,54 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: javatodev_core_api
+
+  cloud:
+    vault:
+      authentication: TOKEN
+      host: 127.0.0.1
+      kv:
+        enabled: true
+      port: 8200
+      scheme: http
+      token: 18456350-7b89-11ed-85e9-a5830358e351
+  config:
+    import: vault://
+    
+  datasource:
+    url: jdbc:mysql://localhost:3306/${spring.database.db}?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true
+    username: ${spring.database.username}
+    password: ${spring.database.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        format-sql: true
+        dialect : org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      
+      
+      
+auth:
+  app:
+    jwt-secret: ${app.config.auth.secret.key}
+    jwt-expiration-ms: 86400000 #24*60*60*1000
+    jwt-refresh-ms: 1296000000  # 15*24*60*60*1000
+    jwt-not-before-ms: 3000
+    
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,env,refresh
+        
+  endpoint:
+    env:
+      post:
+        enabled: true    
+        
